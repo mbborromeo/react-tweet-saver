@@ -1,25 +1,51 @@
+import { useEffect } from 'react';
+import Twit from 'twit';
+import axios from 'axios-jsonp-pro'; //https://www.npmjs.com/package/axios-jsonp-pro
+
 function App() {
-  let response = '';
+  let globalData = '';
 
-  // Twit NPM package
-  var Twit = require('twit');
-  
-  var T = new Twit({
-    consumer_key:         '5o1RYoil51gq82SnY88VXkW2d',
-    consumer_secret:      'xJm8PGdsYpONhWMROhYoyfDWPUqGZwrVBMms6UpRlk4sFa23S8',
-    app_only_auth:        true,
-    //access_token:         '438089030-DFGLRhmN7GI0wmOpRLFgwCx7g2uROUwo5fMg2n9S',
-    //access_token_secret:  'Btjm1h5Ph4U5F4ixQZO6ORbEtQtVQC791ag5S6f3nZsW2',
-    // using Bearer Token for access_token
-    // access_token:         'AAAAAAAAAAAAAAAAAAAAAPKqUgEAAAAABtCQBVTOMgEL0cgCt9F2S5lWOyQ%3D03ylF36C9LVTsCVSWFRydH05QDm3lR66wXmnRfzv3ZPw6oI7wC',
-    timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
-    strictSSL:            false,     // optional - requires SSL certificates to be valid.
-  });
+  useEffect(
+    () => {
+      /*
+      // var Twit = require('twit');
+      var T = new Twit({
+        consumer_key:         '5o1RYoil51gq82SnY88VXkW2d',
+        consumer_secret:      'xJm8PGdsYpONhWMROhYoyfDWPUqGZwrVBMms6UpRlk4sFa23S8',
+        app_only_auth:        true,
+        //access_token:         '438089030-DFGLRhmN7GI0wmOpRLFgwCx7g2uROUwo5fMg2n9S',
+        //access_token_secret:  'Btjm1h5Ph4U5F4ixQZO6ORbEtQtVQC791ag5S6f3nZsW2',
+        // using Bearer Token for access_token
+        // access_token:         'AAAAAAAAAAAAAAAAAAAAAPKqUgEAAAAABtCQBVTOMgEL0cgCt9F2S5lWOyQ%3D03ylF36C9LVTsCVSWFRydH05QDm3lR66wXmnRfzv3ZPw6oI7wC',
+        timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
+        strictSSL:            false,     // optional - requires SSL certificates to be valid.
+      });
+    
+      T.get('search/tweets', { q: 'nyc', count: 10 }, function(err, data, response) {
+        console.log('data is', data);
+        globalData = data;
+      });
+      */
 
-  T.get('search/tweets', { q: 'nyc', count: 10 }, function(err, data, response) {
-    console.log('data is', data);
-    response = data;
-  });
+      // Axios approach
+      axios.jsonp('https://api.twitter.com/1.1/search/tweets.json', {
+        timeout: 60*1000,
+        params: {
+          q: 'nyc',
+          count: 10
+        }
+      })
+      .then(function (response) {
+        console.log(response);
+        // globalData = response;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    },
+    []
+  );
 
   /*
   // Code Snippet from Postman
@@ -58,7 +84,7 @@ function App() {
   */
   return (
     <div>
-      Response: { response }
+      Display response here: {/* globalData */}
     </div>
   );
 }
