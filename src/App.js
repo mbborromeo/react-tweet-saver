@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 // import axios from 'axios-jsonp-pro'; //https://www.npmjs.com/package/axios-jsonp-pro
 
+/* Resource: https://stackoverflow.com/questions/56727680/using-node-js-to-retrieve-twitter-from-user-input-from-browser */
 function App() {
   const [apiResponse, setApiResponse] = useState('');
 
@@ -11,7 +12,7 @@ function App() {
       {
         method: "POST",
         body: JSON.stringify({
-          q: 'nyc',
+          searchQuery: 'toronto', // TO DO: SearchQuery from input field
           count: 10
         })
       }
@@ -94,12 +95,12 @@ function App() {
     5. upon drop, save these Tweets to HTML5 Local Storage
   */
   return (
-    <div>Response 
-    { apiResponse && apiResponse.data && apiResponse.data.statuses && apiResponse.data.statuses.length > 0 &&
-      <span>number 1 is...: 
-        { apiResponse.data.statuses[0].text }
-      </span>    
-    }
+    <div>
+      { apiResponse && apiResponse.data && apiResponse.data.statuses && apiResponse.data.statuses.length > 0 &&
+        <span>Response number 1 is...: 
+          { apiResponse.data.statuses[0].text }
+        </span>    
+      }
     </div>
   );
 }
