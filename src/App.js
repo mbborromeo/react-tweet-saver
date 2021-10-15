@@ -1,18 +1,44 @@
-import { useEffect } from 'react';
-import axios from 'axios-jsonp-pro'; //https://www.npmjs.com/package/axios-jsonp-pro
+import { useState, useEffect } from 'react';
+// import axios from 'axios-jsonp-pro'; //https://www.npmjs.com/package/axios-jsonp-pro
 
 function App() {
-  // let globalData = '';
+  const [apiResponse, setApiResponse] = useState('');
 
-  /*
+  // Fetch approach
+  const callAPI = () => {
+    fetch(
+      'http://localhost:4000/search', // https://api.twitter.com/1.1/search/tweets.json
+      {
+        method: "POST",
+        body: JSON.stringify({
+          q: 'nyc',
+          count: 10
+        })
+      }
+    )
+    .then( res => {
+      console.log('response is', res.json() );
+      // console.log('response first item text is', res.json().data.statuses[0].text );
+      return res.json();
+    })
+    // .then( res => {
+    //   console.log('response first item text is', res.data.statuses[0].text );
+    //   return res.data.statuses;
+    // })
+    .then(
+      res => setApiResponse(res)
+    )
+    .catch( err => err );
+  };
+  
   useEffect(
     () => {
-      
+      callAPI();
     },
     []
   );
-  */
-
+  
+  /*
   // Axios approach
   axios.jsonp(
     'http://localhost:4000/search', // https://api.twitter.com/1.1/search/tweets.json
@@ -31,7 +57,7 @@ function App() {
   .catch(function (error) {
     console.log(error);
   });
-  
+  */
 
   /*
   // Code Snippet from Postman
@@ -58,7 +84,6 @@ function App() {
   xhr.send();
   */
 
-
   /* 
     0. use authentification to call Twitter API
     1. search Twitter by keyword and limit to 10 results upon button click
@@ -68,8 +93,12 @@ function App() {
     5. upon drop, save these Tweets to HTML5 Local Storage
   */
   return (
-    <div>
-      Display response here: {/* globalData */}
+    <div>Response 
+    { apiResponse && 
+      <span>number 1 is...: 
+        { apiResponse.data.statuses[0].text }
+      </span>    
+    }
     </div>
   );
 }
