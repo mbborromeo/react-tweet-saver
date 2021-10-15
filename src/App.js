@@ -42,11 +42,15 @@ function App() {
     <div>
       <FormInput searchFunction={ searchTweets } />
       <br />
+      <ol>
       { apiResponse && apiResponse.data && apiResponse.data.statuses && apiResponse.data.statuses.length > 0 &&
-        <span>Response number 1 is...: 
-          { apiResponse.data.statuses[0].text }
-        </span>    
+        apiResponse.data.statuses.map( (item) => (
+          <li>
+            { item.text }
+          </li>
+        ))          
       }
+      </ol>
     </div>
   );
 }
