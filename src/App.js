@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import FormInput from './components/FormInput';
+import TweetItem from './components/TweetItem';
 
 /* Resource: https://stackoverflow.com/questions/56727680/using-node-js-to-retrieve-twitter-from-user-input-from-browser */
 function App() {
@@ -40,17 +41,23 @@ function App() {
   */
   return (
     <div>
+      <h1>Tweet Saver</h1>
+      <hr />
+      <br />
+
       <FormInput searchFunction={ searchTweets } />
       <br />
-      <ol>
+      
       { apiResponse && apiResponse.data && apiResponse.data.statuses && apiResponse.data.statuses.length > 0 &&
         apiResponse.data.statuses.map( (item) => (
-          <li>
-            { item.text }
-          </li>
+          <TweetItem 
+            username={ item.user.name }
+            profileimage={ item.user.profile_image_url }
+            text={ item.text } 
+            datecreated={ item.created_at }
+          />
         ))          
       }
-      </ol>
     </div>
   );
 }

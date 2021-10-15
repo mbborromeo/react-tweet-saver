@@ -18,10 +18,11 @@ const FormInput = ({ searchFunction }) => {
     <form onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Type in keyword"
+        placeholder="Search Twitter"
         value={ keyword }
         onChange={ (e) => setKeyword(e.target.value) }
       />
+      &nbsp;
       <button type="submit">Search</button>
       {/* <input
         type="button"
