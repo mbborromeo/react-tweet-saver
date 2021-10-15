@@ -1,7 +1,6 @@
 const TweetItem = ({ clickHandler, text, username, profileImage, dateCreated, tweetId, index }) => {
   const dragstart_handler = (ev) => {                            
-    ev.dataTransfer.setData("text/plain", ev.target.id);
-    console.log("Inside drag item: " + ev.dataTransfer.getData("text") );   
+    ev.dataTransfer.setData("text/plain", ev.target.id);   
   };
 
   return (

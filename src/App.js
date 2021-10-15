@@ -13,7 +13,6 @@ function App() {
     console.log( "inside dragover" );
   };
 
-  /* save to HTML5 Local Storage */
   const drop_handler = useCallback(
     (ev) => {
       ev.preventDefault();
@@ -24,6 +23,7 @@ function App() {
       
       //get div element of the item dragged from search list and dropped in save area
       const htmlDiv = document.getElementById( fromID );
+      console.log('htmlDiv', htmlDiv)
       
       //append HTML element to the drop zone/save area
       ev.target.appendChild( htmlDiv );    
@@ -32,18 +32,22 @@ function App() {
       var indexOfDraggedTweet = htmlDiv.dataset.index;
       console.log('drop_handler - index of dragged tweet', indexOfDraggedTweet)
 
+      /********** save to HTML5 Local Storage ********************/
+      /*
       //populate tweetObject using the index reference, before pushing it to global array
       var tweetObject = {
+        id: apiResponse.data.statuses[indexOfDraggedTweet].id,
         user_name: apiResponse.data.statuses[indexOfDraggedTweet].user.name,
         text: apiResponse.data.statuses[indexOfDraggedTweet].text,
-        createdAt: apiResponse.data.statuses[indexOfDraggedTweet].created_at,
-        user_profileImageUrlHttps: apiResponse.data.statuses[indexOfDraggedTweet].user.profile_image_url
+        created_at: apiResponse.data.statuses[indexOfDraggedTweet].created_at,
+        user_profile_image_url: apiResponse.data.statuses[indexOfDraggedTweet].user.profile_image_url
       }
+      */
+      /*
+      const tweetObject = apiResponse.data.statuses[indexOfDraggedTweet];
     
-      //push tweet object to top of array allPosts.
+      //push tweet object to top of array
       const copyOfSavedTweets = [...savedTweetsGlobalArray, tweetObject];
-      //copyOfSavedTweets.push( tweetObject );
-      //savedTweetsGlobalArray.push( tweetObject );  
       setSavedTweetsGlobalArray( copyOfSavedTweets );
 
       //can only store text, so need to stringify. Remove Javascript related functionality.            
@@ -51,9 +55,9 @@ function App() {
 
       //locally save savedTweetsGlobalArray.  localStorage is a Javascript built-in variable, https://www.w3schools.com/html/html5_webstorage.asp
       localStorage.setItem("savedTweetsGlobalArrayLocalStorage", savedTweetsGlobalArrayStringified);
-      
+      */
     }, 
-    [apiResponse.data.statuses, savedTweetsGlobalArray]
+    []
   );
 
   /* run after component has mounted */
@@ -73,7 +77,7 @@ function App() {
       }
       /* end - load saved Tweets *********************************************************/
     },
-    [drop_handler]
+    [drop_handler, apiResponse]
   );
 
   const searchTweets = (keyword) => {
@@ -82,7 +86,7 @@ function App() {
       {
         method: "POST",
         body: JSON.stringify({
-          searchQuery: keyword, // value from input field
+          searchQuery: keyword,
           count: 10,
         }),        
         headers: {
@@ -149,7 +153,6 @@ function App() {
           }
           </div>
         </div>
-
       </div>
     </div>
   );
