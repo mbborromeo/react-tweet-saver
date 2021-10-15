@@ -1,0 +1,37 @@
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+.flex-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  /* align-items: flex-start; cannot be used with line below */
+  align-content: stretch;
+}
+
+.col-half {
+    width: 50%;
+    /* height: 100%;
+    min-height: 200px; */
+    border: 1px solid blue;
+    flex: 1 1 auto; /* grow, shrink, basis */
+}
+
+.list {
+    border: 1px solid red;
+    margin-top: 40px;
+}
+
+h3 {
+    padding: 0;
+    margin: 0;
+}
+
+#searchResults div, #savedTweets div {
+    border: 1px solid green;
+}
+
+#savedTweets, #searchResults {
+    /*min-height: 600px;*/ /*needs some height, otherwise event handler doesn't work*/
+    height: 100%;
+}

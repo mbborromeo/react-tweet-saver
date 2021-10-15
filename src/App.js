@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import FormInput from './components/FormInput';
 import TweetItem from './components/TweetItem';
+import './App.css';
 
 /* Resource: https://stackoverflow.com/questions/56727680/using-node-js-to-retrieve-twitter-from-user-input-from-browser */
 function App() {
@@ -45,20 +46,33 @@ function App() {
       <hr />
       <br />
 
-      <FormInput searchFunction={ searchTweets } />
-      <br />
-      
-      { apiResponse && apiResponse.data && apiResponse.data.statuses && apiResponse.data.statuses.length > 0 &&
-        apiResponse.data.statuses.map( (item) => (
-          <TweetItem 
-            username={ item.user.name }
-            profileImage={ item.user.profile_image_url }
-            text={ item.text } 
-            dateCreated={ item.created_at }
-            tweetId={ item.id }
-          />
-        ))          
-      }
+      <div class="flex-wrapper">
+        <div class="col-half">
+          <FormInput searchFunction={ searchTweets } />
+          
+          <div id="searchResults" class="list">
+          { apiResponse && apiResponse.data && apiResponse.data.statuses && apiResponse.data.statuses.length > 0 &&
+            apiResponse.data.statuses.map( (item) => (
+              <TweetItem 
+                username={ item.user.name }
+                profileImage={ item.user.profile_image_url }
+                text={ item.text } 
+                dateCreated={ item.created_at }
+                tweetId={ item.id }
+              />
+            ))          
+          }
+          </div>
+        </div>
+
+        <div class="col-half">
+          <h3>Saved Tweets</h3>
+
+          <div id="savedTweets" class="list">          
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
