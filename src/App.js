@@ -36,23 +36,25 @@ function App() {
   });
   */
 
-  /*
   // Axios approach
-  axios.jsonp('https://api.twitter.com/1.1/search/tweets.json', {
-    timeout: 60*1000,
-    params: {
-      q: 'nyc',
-      count: 10
+  axios.jsonp(
+    'http://localhost:4000/search', // https://api.twitter.com/1.1/search/tweets.json
+    {
+      timeout: 60*1000,
+      params: {
+        q: 'nyc',
+        count: 10
+      }
     }
-  })
+  )
   .then(function (response) {
-    console.log(response);
+    console.log('response is', response);
     // globalData = response;
   })
   .catch(function (error) {
     console.log(error);
   });
-  */
+  
 
   /*
   // Code Snippet from Postman

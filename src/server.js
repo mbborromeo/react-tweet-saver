@@ -16,13 +16,20 @@ const T = new Twit({
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
 app.post( '/search', function (req, res, next){
-  T.get('search/tweets', {q: req.body.searchQuery, count: 10}, function (err, data, response){
-    console.log('data is', data)
-    return res.json({
-      data: data
+  T.get(
+    'search/tweets', 
+    {
+      q: 'nyc', // req.body.searchQuery
+      count: 10
+    }, 
+    function (err, data, response){
+      console.log('data is', data)
+      return res.json({
+        data: data
+      });
     });
-  });
-});
+  }
+);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
