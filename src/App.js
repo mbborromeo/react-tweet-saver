@@ -18,7 +18,7 @@ function App() {
     )
     .then( res => {
       console.log('response is', res.json() );
-      // console.log('response first item text is', res.json().data.statuses[0].text );
+      //console.log('response[PromiseResult] is', res.json()['PromiseResult'] );
       return res.json();
     })
     // .then( res => {
@@ -94,7 +94,7 @@ function App() {
   */
   return (
     <div>Response 
-    { apiResponse && 
+    { apiResponse && apiResponse.data && apiResponse.data.statuses && apiResponse.data.statuses.length > 0 &&
       <span>number 1 is...: 
         { apiResponse.data.statuses[0].text }
       </span>    
