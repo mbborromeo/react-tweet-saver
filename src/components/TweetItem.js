@@ -1,13 +1,13 @@
-const TweetItem = ({ text, username, profileimage, datecreated }) => {
+const TweetItem = ({ text, username, profileImage, dateCreated, tweetId }) => {
   return (
-    <div>
-      <img src={ profileimage } alt={ username } />
+    <div key={ tweetId }>
+      <img src={ profileImage } alt={ username } />
       <br />
       <span><b>{ username }</b></span>
       <br />
       <span>{ text }</span>
       <br />
-      <span>{ datecreated }</span>
+      <span>{ dateCreated }</span>
     </div>
   );
 };

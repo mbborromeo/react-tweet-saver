@@ -52,9 +52,10 @@ function App() {
         apiResponse.data.statuses.map( (item) => (
           <TweetItem 
             username={ item.user.name }
-            profileimage={ item.user.profile_image_url }
+            profileImage={ item.user.profile_image_url }
             text={ item.text } 
-            datecreated={ item.created_at }
+            dateCreated={ item.created_at }
+            tweetId={ item.id }
           />
         ))          
       }
