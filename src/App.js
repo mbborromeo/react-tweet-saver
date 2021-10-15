@@ -13,8 +13,11 @@ function App() {
         method: "POST",
         body: JSON.stringify({
           searchQuery: 'toronto', // TO DO: SearchQuery from input field
-          count: 10
-        })
+          count: 10,
+        }),        
+        headers: {
+          "Content-Type": "application/json"
+        },
       }
     )
     .then( res => {
