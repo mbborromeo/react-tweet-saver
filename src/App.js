@@ -17,9 +17,10 @@ function App() {
       }
     )
     .then( res => {
-      console.log('response is', res.json() );
+      const response = res.json();
+      console.log('response is', response );
       //console.log('response[PromiseResult] is', res.json()['PromiseResult'] );
-      return res.json();
+      return response;
     })
     // .then( res => {
     //   console.log('response first item text is', res.data.statuses[0].text );
