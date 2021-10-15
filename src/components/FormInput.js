@@ -24,11 +24,6 @@ const FormInput = ({ searchFunction }) => {
       />
       &nbsp;
       <button type="submit">Search</button>
-      {/* <input
-        type="button"
-        value="Clear"
-        onClick={() => setKeyword('')}
-      /> */}
     </form>
   );
 };
