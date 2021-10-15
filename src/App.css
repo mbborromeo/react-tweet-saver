@@ -15,11 +15,11 @@
     min-height: 200px; */
     border: 1px solid blue;
     flex: 1 1 auto; /* grow, shrink, basis */
+    background-color: lightgrey;
 }
 
 .list {
     border: 1px solid red;
-    margin-top: 40px;
 }
 
 h3 {
@@ -29,9 +29,20 @@ h3 {
 
 #searchResults div, #savedTweets div {
     border: 1px solid green;
+    background-color: white;
+}
+
+#searchResults div:hover {
+  background-color: lightgrey;
 }
 
 #savedTweets, #searchResults {
     /*min-height: 600px;*/ /*needs some height, otherwise event handler doesn't work*/
     height: 100%;
+}
+
+.top-wrapper {
+  height: 40px;
+  border: 1px solid pink;
+  background-color: white;
 }

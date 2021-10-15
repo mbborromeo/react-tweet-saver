@@ -46,11 +46,11 @@ function App() {
       <hr />
       <br />
 
-      <div class="flex-wrapper">
-        <div class="col-half">
+      <div className="flex-wrapper">
+        <div className="col-half">
           <FormInput searchFunction={ searchTweets } />
           
-          <div id="searchResults" class="list">
+          <div id="searchResults" className="list">
           { apiResponse && apiResponse.data && apiResponse.data.statuses && apiResponse.data.statuses.length > 0 &&
             apiResponse.data.statuses.map( (item) => (
               <TweetItem 
@@ -65,10 +65,12 @@ function App() {
           </div>
         </div>
 
-        <div class="col-half">
-          <h3>Saved Tweets</h3>
+        <div className="col-half">
+          <div className="top-wrapper">
+            <h3>Saved Tweets</h3>
+          </div>
 
-          <div id="savedTweets" class="list">          
+          <div id="savedTweets" className="list">          
           </div>
         </div>
 

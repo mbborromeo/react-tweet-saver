@@ -15,7 +15,7 @@ const FormInput = ({ searchFunction }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="top-wrapper">
       <input
         type="text"
         placeholder="Search Twitter"
