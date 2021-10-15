@@ -14,6 +14,13 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
+In the project directory's src folder, you can run:
+
+### `node server.js`
+
+This will run the Express.js proxy on [http://localhost:4000](http://localhost:4000) which makes the Twitter REST API search call.
+
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
