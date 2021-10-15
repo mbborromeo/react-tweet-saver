@@ -6,6 +6,7 @@ import './App.css';
 /* Resource: https://stackoverflow.com/questions/56727680/using-node-js-to-retrieve-twitter-from-user-input-from-browser */
 function App() {
   const [apiResponse, setApiResponse] = useState('');
+  let savedTweetsGlobalArray = [];
 
   const searchTweets = (keyword) => {
     fetch(
@@ -31,11 +32,12 @@ function App() {
     )
     .catch( err => err );
   };
+
+  const saveToLocalStorage = () => {
+    console.log('saveToLocalStorage')
+  };
     
   /* 
-    0. use authentification to call Twitter API
-    1. search Twitter by keyword from input field and limit to 10 results upon button click
-    2. display results in left column list
     3. make left-column items draggable
     4. make a hotspot in right-column so left-column items can be dropped there
     5. upon drop, save these Tweets to HTML5 Local Storage
@@ -52,13 +54,16 @@ function App() {
           
           <div id="searchResults" className="list">
           { apiResponse && apiResponse.data && apiResponse.data.statuses && apiResponse.data.statuses.length > 0 &&
-            apiResponse.data.statuses.map( (item) => (
+            apiResponse.data.statuses.map( (item, i) => (
               <TweetItem 
+                key={ item.id }
+                tweetId={ item.id }                
+                index={ i }
                 username={ item.user.name }
                 profileImage={ item.user.profile_image_url }
                 text={ item.text } 
                 dateCreated={ item.created_at }
-                tweetId={ item.id }
+                clickHandler={ saveToLocalStorage }
               />
             ))          
           }
