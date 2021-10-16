@@ -3,16 +3,19 @@ import { useState, useCallback } from 'react';
 const FormInput = ({ searchFunction }) => {
   const [keyword, setKeyword] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
 
-    if( keyword ){
-      searchFunction( keyword );
-      setKeyword(''); // reset field to empty      
-    } else {
-      return; // exit if field empty
-    }
-  };
+      if( keyword ){
+        searchFunction( keyword );
+        setKeyword(''); // reset field to empty      
+      } else {
+        return; // exit if field empty
+      }
+    },
+    [keyword, searchFunction]
+  );
 
   return (
     <form onSubmit={handleSubmit} className="top-wrapper">
