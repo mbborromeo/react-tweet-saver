@@ -5,12 +5,15 @@ import './App.css';
 
 /* Resource: https://stackoverflow.com/questions/56727680/using-node-js-to-retrieve-twitter-from-user-input-from-browser */
 function App() {
-  const [apiResponse, setApiResponse] = useState('');
-  const [savedTweetsGlobalArray, setSavedTweetsGlobalArray] = useState([]);
+  const [apiResponse, setApiResponse] = useState({});
+  const [newlySavedTweets, setNewlySavedTweets] = useState([]);
+  const [previouslySavedTweets, setPreviouslySavedTweets] = useState([]);
+  console.log('App apiResponse', apiResponse)
+  console.log('App newlySavedTweets', newlySavedTweets)
+  console.log('App previouslySavedTweets', previouslySavedTweets)
 
   const dragover_handler = (ev) => {
     ev.preventDefault();
-    console.log( "inside dragover" );
   };
 
   const drop_handler = useCallback(
@@ -19,65 +22,48 @@ function App() {
       
       //get ID of the item dropped
       const fromID = ev.dataTransfer.getData("text"); 
-      console.log( "inside drop - element's text is: " + fromID );
+      console.log( "inside drop - element's ID is: " + fromID );
       
       //get div element of the item dragged from search list and dropped in save area
       const htmlDiv = document.getElementById( fromID );
-      console.log('htmlDiv', htmlDiv)
       
       //append HTML element to the drop zone/save area
       ev.target.appendChild( htmlDiv );    
-
+  
       //get the index of the dragged tweet
-      var indexOfDraggedTweet = htmlDiv.dataset.index;
+      const indexOfDraggedTweet = htmlDiv.dataset.index;
       console.log('drop_handler - index of dragged tweet', indexOfDraggedTweet)
-
+  
       /********** save to HTML5 Local Storage ********************/
-      /*
       //populate tweetObject using the index reference, before pushing it to global array
-      var tweetObject = {
-        id: apiResponse.data.statuses[indexOfDraggedTweet].id,
-        user_name: apiResponse.data.statuses[indexOfDraggedTweet].user.name,
-        text: apiResponse.data.statuses[indexOfDraggedTweet].text,
-        created_at: apiResponse.data.statuses[indexOfDraggedTweet].created_at,
-        user_profile_image_url: apiResponse.data.statuses[indexOfDraggedTweet].user.profile_image_url
-      }
-      */
-      /*
       const tweetObject = apiResponse.data.statuses[indexOfDraggedTweet];
-    
+      
       //push tweet object to top of array
-      const copyOfSavedTweets = [...savedTweetsGlobalArray, tweetObject];
-      setSavedTweetsGlobalArray( copyOfSavedTweets );
+      const copyOfSavedTweets = [...newlySavedTweets, tweetObject];
+      setNewlySavedTweets( copyOfSavedTweets );
 
+      const oldAndNewSavedTweets = [...previouslySavedTweets, ...newlySavedTweets, tweetObject];
+  
       //can only store text, so need to stringify. Remove Javascript related functionality.            
-      var savedTweetsGlobalArrayStringified = JSON.stringify( savedTweetsGlobalArray );
-
-      //locally save savedTweetsGlobalArray.  localStorage is a Javascript built-in variable, https://www.w3schools.com/html/html5_webstorage.asp
+      const savedTweetsGlobalArrayStringified = JSON.stringify( oldAndNewSavedTweets );
+  
+      //locally save newlySavedTweets.  localStorage is a Javascript built-in variable, https://www.w3schools.com/html/html5_webstorage.asp
       localStorage.setItem("savedTweetsGlobalArrayLocalStorage", savedTweetsGlobalArrayStringified);
-      */
     }, 
-    []
+    [apiResponse, previouslySavedTweets, newlySavedTweets]
   );
 
   /* run after component has mounted */
   useEffect(
     () => {
-      const divSavedTweets = document.getElementById("savedTweets");
-
-      /* add event listeners */
-      divSavedTweets.addEventListener("dragover", dragover_handler, false );
-      divSavedTweets.addEventListener("drop", drop_handler, false );
-
-      /* load saved Tweets *********************************************************/
+      // load saved Tweets
       let dataAsText = localStorage.getItem("savedTweetsGlobalArrayLocalStorage");
 
       if( dataAsText ){
-        setSavedTweetsGlobalArray( JSON.parse(dataAsText) ); //adds back Javascript functionality, because it is now a Javascript object.
+        setPreviouslySavedTweets( JSON.parse(dataAsText) ); //adds back Javascript functionality, because it is now a Javascript object.
       }
-      /* end - load saved Tweets *********************************************************/
     },
-    [drop_handler, apiResponse]
+    []
   );
 
   const searchTweets = (keyword) => {
@@ -94,14 +80,8 @@ function App() {
         },
       }
     )
-    .then( res => {
-      const response = res.json();
-      console.log('response is', response );
-      return response;
-    })
-    .then(
-      res => setApiResponse(res)
-    )
+    .then( res => (res.json()) )
+    .then( dataObj => setApiResponse(dataObj) )
     .catch( err => err );
   };
     
@@ -137,9 +117,9 @@ function App() {
             <h3>Saved Tweets</h3>
           </div>
 
-          <div id="savedTweets" className="list">   
-          { savedTweetsGlobalArray && savedTweetsGlobalArray.length > 0 &&
-            savedTweetsGlobalArray.map( (item, i) => (
+          <div id="savedTweets" className="list" onDrop={ drop_handler } onDragOver={ dragover_handler }>   
+          { previouslySavedTweets && previouslySavedTweets.length > 0 &&
+            previouslySavedTweets.map( (item, i) => (
               <TweetItem 
                 key={ item.id }
                 tweetId={ item.id }                

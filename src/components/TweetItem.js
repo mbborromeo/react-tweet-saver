@@ -1,12 +1,11 @@
-const TweetItem = ({ clickHandler, text, username, profileImage, dateCreated, tweetId, index }) => {
+const TweetItem = ({ text, username, profileImage, dateCreated, tweetId, index }) => {
   const dragstart_handler = (ev) => {                            
     ev.dataTransfer.setData("text/plain", ev.target.id);   
   };
 
   return (
     <div 
-      id={ tweetId } 
-      onClick={ clickHandler }
+      id={ tweetId }
       data-index={ index }
       draggable="true"
       onDragStart={ dragstart_handler }
