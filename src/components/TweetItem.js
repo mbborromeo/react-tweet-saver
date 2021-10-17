@@ -5,7 +5,7 @@ const TweetItem = ({ text, username, profileImage, dateCreated, tweetId, index }
 
   return (
     <div 
-      id={ index } // tweetId
+      id={ tweetId }
       data-index={ index }
       draggable="true"
       onDragStart={ dragstart_handler }
