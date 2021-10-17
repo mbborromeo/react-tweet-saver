@@ -6,11 +6,9 @@ import './App.css';
 /* Resource: https://stackoverflow.com/questions/56727680/using-node-js-to-retrieve-twitter-from-user-input-from-browser */
 function App() {
   const [apiResponse, setApiResponse] = useState({});
-  const [newlySavedTweets, setNewlySavedTweets] = useState([]);
-  const [previouslySavedTweets, setPreviouslySavedTweets] = useState([]);
+  const [savedTweets, setSavedTweets] = useState([]);
   console.log('App apiResponse', apiResponse)
-  console.log('App newlySavedTweets', newlySavedTweets)
-  console.log('App previouslySavedTweets', previouslySavedTweets)
+  console.log('App savedTweets', savedTweets)
 
   const dragover_handler = (ev) => {
     ev.preventDefault();
@@ -23,34 +21,28 @@ function App() {
       //get ID of the item dropped
       const fromID = ev.dataTransfer.getData("text"); 
       console.log( "inside drop - element's ID is: " + fromID );
-      
-      //get div element of the item dragged from search list and dropped in save area
-      const htmlDiv = document.getElementById( fromID );
-      
-      //append HTML element to the drop zone/save area
-      ev.target.appendChild( htmlDiv );    
-  
-      //get the index of the dragged tweet
-      const indexOfDraggedTweet = htmlDiv.dataset.index;
-      console.log('drop_handler - index of dragged tweet', indexOfDraggedTweet)
-  
-      /********** save to HTML5 Local Storage ********************/
-      //populate tweetObject using the index reference, before pushing it to global array
-      const tweetObject = apiResponse.data.statuses[indexOfDraggedTweet];
-      
-      //push tweet object to top of array
-      const copyOfSavedTweets = [...newlySavedTweets, tweetObject];
-      setNewlySavedTweets( copyOfSavedTweets );
 
-      const oldAndNewSavedTweets = [...previouslySavedTweets, ...newlySavedTweets, tweetObject];
-  
+      //populate tweetObject using the index reference, before pushing it to global array
+      const tweetObject = apiResponse.data.statuses[fromID];
+      
+      // remove tweet from search list on left column (remove from searched tweet array)
+      // const searchResultTweets = apiResponse.data.statuses.filter(t => t.id !== fromID);
+      // console.log('searchResultTweets', searchResultTweets)
+      // setApiResponse(searchResultTweets);
+      
+      const savedTweetsUpdated = [...savedTweets, tweetObject];
+      
       //can only store text, so need to stringify. Remove Javascript related functionality.            
-      const savedTweetsGlobalArrayStringified = JSON.stringify( oldAndNewSavedTweets );
+      const savedTweetsGlobalArrayStringified = JSON.stringify( savedTweetsUpdated );
   
       //locally save newlySavedTweets.  localStorage is a Javascript built-in variable, https://www.w3schools.com/html/html5_webstorage.asp
       localStorage.setItem("savedTweetsGlobalArrayLocalStorage", savedTweetsGlobalArrayStringified);
+    
+      // add tweet on saved list on right column (add to saved tweet array)
+      setSavedTweets(savedTweetsUpdated);
+      
     }, 
-    [apiResponse, previouslySavedTweets, newlySavedTweets]
+    [apiResponse, savedTweets]
   );
 
   /* run after component has mounted */
@@ -60,7 +52,7 @@ function App() {
       let dataAsText = localStorage.getItem("savedTweetsGlobalArrayLocalStorage");
 
       if( dataAsText ){
-        setPreviouslySavedTweets( JSON.parse(dataAsText) ); //adds back Javascript functionality, because it is now a Javascript object.
+        setSavedTweets( JSON.parse(dataAsText) ); //adds back Javascript functionality, because it is now a Javascript object.
       }
     },
     []
@@ -118,8 +110,8 @@ function App() {
           </div>
 
           <div id="savedTweets" className="list" onDrop={ drop_handler } onDragOver={ dragover_handler }>   
-          { previouslySavedTweets && previouslySavedTweets.length > 0 &&
-            previouslySavedTweets.map( (item, i) => (
+          { savedTweets && savedTweets.length > 0 &&
+            savedTweets.map( (item, i) => (
               <TweetItem 
                 key={ item.id }
                 tweetId={ item.id }                
