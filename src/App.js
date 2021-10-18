@@ -5,9 +5,9 @@ import './App.css';
 
 /* Resource: https://stackoverflow.com/questions/56727680/using-node-js-to-retrieve-twitter-from-user-input-from-browser */
 function App() {  
-  const [apiResponse, setApiResponse] = useState({});
+  const [searchResultTweets, setSearchResultTweets] = useState([]);
   const [savedTweets, setSavedTweets] = useState([]);
-  console.log('App apiResponse', apiResponse)
+  console.log('App searchResultTweets', searchResultTweets)
   console.log('App savedTweets', savedTweets)
 
   const dragover_handler = (ev) => {
@@ -17,11 +17,9 @@ function App() {
   const saveTweet = useCallback(
     (tid) => {
       //populate tweetObject using the index reference, before pushing it to global array
-      const tweetObject = apiResponse.data.statuses.filter( (tweet) => (tweet.id === tid) );
-      console.log('tweetObject', tweetObject)
+      const tweetObject = searchResultTweets.find( (tweet) => (tweet.id === tid) );
       
       const savedTweetsUpdated = [...savedTweets, tweetObject];
-      console.log('savedTweetsUpdated', savedTweetsUpdated)
       // add tweet on saved list on right column (add to saved tweet array)
       setSavedTweets(savedTweetsUpdated);
       
@@ -32,11 +30,11 @@ function App() {
       localStorage.setItem("savedTweetsGlobalArrayLocalStorage", savedTweetsGlobalArrayStringified);
     
       // remove tweet from search list on left column (remove from searched tweet array)
-      const searchResultTweets = apiResponse.data.statuses.filter(t => t.id !== tid);
-      console.log('searchResultTweets', searchResultTweets)
-      setApiResponse(searchResultTweets); 
+      const resultTweets = searchResultTweets.filter(t => ( parseInt(t.id) !== tid ));
+      // console.log('searchResultTweets', searchResultTweets)
+      setSearchResultTweets(resultTweets); 
     },
-    [apiResponse, savedTweets]
+    [searchResultTweets, savedTweets]
   );
 
   const drop_handler = useCallback(
@@ -44,7 +42,7 @@ function App() {
       ev.preventDefault();
       
       //get ID of the item dropped
-      const tweetID = ev.dataTransfer.getData("text"); 
+      const tweetID = parseInt( ev.dataTransfer.getData("text") ); 
       console.log( "inside drop - element's ID (Tweet ID) is: " + tweetID );
 
       if(savedTweets && savedTweets.length > 0){
@@ -97,7 +95,8 @@ function App() {
       }
     )
     .then( res => (res.json()) )
-    .then( dataObj => setApiResponse(dataObj) )
+    .then( dataObj => (dataObj.data.statuses) )
+    .then( searchResults => setSearchResultTweets(searchResults) )
     .catch( err => err );
   };
     
@@ -112,8 +111,8 @@ function App() {
           <FormInput searchFunction={ searchTweets } />
           
           <div id="searchResults" className="list">
-          { apiResponse && apiResponse.data && apiResponse.data.statuses && apiResponse.data.statuses.length > 0 &&
-            apiResponse.data.statuses.map( (item, i) => (
+          { searchResultTweets && searchResultTweets.length > 0 &&
+            searchResultTweets.map( (item, i) => (
               <TweetItem 
                 key={ item.id }
                 tweetId={ item.id }                
@@ -134,19 +133,19 @@ function App() {
           </div>
 
           <div id="savedTweets" className="list" onDrop={ drop_handler } onDragOver={ dragover_handler }>   
-          {/* { savedTweets && savedTweets.length > 0 &&
+          { savedTweets && savedTweets.length > 0 &&
             savedTweets.map( (item, i) => (
               <TweetItem 
                 key={ item.id }
                 tweetId={ item.id }                
                 index={ i }
-                // username={ item.user.name }
-                // profileImage={ item.user.profile_image_url }
+                username={ item.user.name }
+                profileImage={ item.user.profile_image_url }
                 text={ item.text } 
                 dateCreated={ item.created_at }
               />
             ))
-          } */}
+          }
           </div>
         </div>
       </div>
