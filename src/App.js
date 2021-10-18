@@ -26,7 +26,7 @@ function App() {
       localStorage.setItem("savedTweetsGlobalArrayLocalStorage", savedTweetsGlobalArrayStringified);
     
       // Remove tweet from search list on left column
-      const resultTweets = searchResultTweets.filter(t => ( parseInt(t.id) !== tid ));
+      const resultTweets = searchResultTweets.filter(t => (t.id !== tid));
       setSearchResultTweets(resultTweets); 
     },
     [searchResultTweets, savedTweets]
