@@ -1,6 +1,6 @@
-const TweetItem = ({ text, username, profileImage, dateCreated, tweetId, index }) => {
+const TweetItem = ({ tweetId, index, text, username, profileImage, dateCreated }) => {
   const dragstart_handler = (ev) => {                            
-    ev.dataTransfer.setData("text/plain", ev.target.id);   
+    ev.dataTransfer.setData("text/plain", tweetId); // ev.target.id
   };
 
   return (
