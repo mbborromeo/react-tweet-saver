@@ -7,8 +7,6 @@ import './App.css';
 function App() {  
   const [searchResultTweets, setSearchResultTweets] = useState([]);
   const [savedTweets, setSavedTweets] = useState([]);
-  console.log('App searchResultTweets', searchResultTweets)
-  console.log('App savedTweets', savedTweets)
 
   const dragover_handler = (ev) => {
     ev.preventDefault();
@@ -31,7 +29,6 @@ function App() {
     
       // remove tweet from search list on left column (remove from searched tweet array)
       const resultTweets = searchResultTweets.filter(t => ( parseInt(t.id) !== tid ));
-      // console.log('searchResultTweets', searchResultTweets)
       setSearchResultTweets(resultTweets); 
     },
     [searchResultTweets, savedTweets]
@@ -42,25 +39,20 @@ function App() {
       ev.preventDefault();
       
       //get ID of the item dropped
-      const tweetID = parseInt( ev.dataTransfer.getData("text") ); 
-      console.log( "inside drop - element's ID (Tweet ID) is: " + tweetID );
+      const tweetID = parseInt( ev.dataTransfer.getData("text") );
 
       if(savedTweets && savedTweets.length > 0){
-        console.log('savedTweets not empty')
         // check if dragged tweet exists in saved list
         const isTweetAlreadySaved = (tweet) => (tweet.id === tweetID);
         // findIndex returns -1 if no element is found
         const tweetArrayIndex = savedTweets.findIndex( isTweetAlreadySaved );
-        console.log('tweetArrayIndex', tweetArrayIndex)
 
         // if it does, then do not proceed. else continue
         if(tweetArrayIndex === -1){
           saveTweet(tweetID);
-        } else {
-          console.log('tweet already saved - tweetArrayIndex returned:', tweetArrayIndex)
         }
       } else {
-        console.log('savedTweets currenty empty')
+        // savedTweets currenty empty
         saveTweet(tweetID);
       }
     }, 
