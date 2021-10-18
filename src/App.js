@@ -3,7 +3,7 @@ import FormInput from './components/FormInput';
 import TweetItem from './components/TweetItem';
 import './App.css';
 
-/* Resource: https://stackoverflow.com/questions/56727680/using-node-js-to-retrieve-twitter-from-user-input-from-browser */
+//Resource: https://stackoverflow.com/questions/56727680/using-node-js-to-retrieve-twitter-from-user-input-from-browser
 function App() {  
   const [searchResultTweets, setSearchResultTweets] = useState([]);
   const [savedTweets, setSavedTweets] = useState([]);
@@ -14,20 +14,18 @@ function App() {
 
   const saveTweet = useCallback(
     (tid) => {
-      //populate tweetObject using the index reference, before pushing it to global array
       const tweetObject = searchResultTweets.find( (tweet) => (tweet.id === tid) );
-      
+
+      //add tweet on saved list on right column
       const savedTweetsUpdated = [...savedTweets, tweetObject];
-      // add tweet on saved list on right column (add to saved tweet array)
       setSavedTweets(savedTweetsUpdated);
       
-      //can only store text, so need to stringify. Remove Javascript related functionality.            
+      //HTML5 localStorage can only store text, so need to change array/object to String before saving, 
+      //which removes Javascript functionality.      
       const savedTweetsGlobalArrayStringified = JSON.stringify( savedTweetsUpdated );
-
-      //locally save tweets.  localStorage is a Javascript built-in variable, https://www.w3schools.com/html/html5_webstorage.asp
       localStorage.setItem("savedTweetsGlobalArrayLocalStorage", savedTweetsGlobalArrayStringified);
     
-      // remove tweet from search list on left column (remove from searched tweet array)
+      //remove tweet from search list on left column
       const resultTweets = searchResultTweets.filter(t => ( parseInt(t.id) !== tid ));
       setSearchResultTweets(resultTweets); 
     },
@@ -37,36 +35,34 @@ function App() {
   const drop_handler = useCallback(
     (ev) => {
       ev.preventDefault();
-      
-      //get ID of the item dropped
       const tweetID = parseInt( ev.dataTransfer.getData("text") );
 
       if(savedTweets && savedTweets.length > 0){
-        // check if dragged tweet exists in saved list
         const isTweetAlreadySaved = (tweet) => (tweet.id === tweetID);
-        // findIndex returns -1 if no element is found
+        //check if dragged tweet exists in saved list. findIndex returns -1 if no element found
         const tweetArrayIndex = savedTweets.findIndex( isTweetAlreadySaved );
 
-        // if it does, then do not proceed. else continue
         if(tweetArrayIndex === -1){
           saveTweet(tweetID);
         }
       } else {
-        // savedTweets currenty empty
+        //savedTweets currenty empty
         saveTweet(tweetID);
       }
     }, 
     [savedTweets, saveTweet]
   );
 
-  /* run after component has mounted */
+  //run after component has mounted
   useEffect(
     () => {
-      // load saved Tweets
-      let dataAsText = localStorage.getItem("savedTweetsGlobalArrayLocalStorage");
+      //load Tweets saved onto HTML5 localStorage
+      let dataAsString = localStorage.getItem("savedTweetsGlobalArrayLocalStorage");
 
-      if( dataAsText ){
-        setSavedTweets( JSON.parse(dataAsText) ); //adds back Javascript functionality, because it is now a Javascript object.
+      if( dataAsString ){
+        //change string back to Javascript object
+        const dataAsObject = JSON.parse(dataAsString)
+        setSavedTweets( dataAsObject ); 
       }
     },
     []
@@ -74,7 +70,7 @@ function App() {
 
   const searchTweets = (keyword) => {
     fetch(
-      'http://localhost:4000/search', // https://api.twitter.com/1.1/search/tweets.json
+      'http://localhost:4000/search', //https://api.twitter.com/1.1/search/tweets.json
       {
         method: "POST",
         body: JSON.stringify({
